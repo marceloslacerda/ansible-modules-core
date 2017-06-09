@@ -367,7 +367,8 @@ def main():
                         module.fail_json(msg="failed to validate", exit_status=rc, stdout=out, stderr=err)
                 b_mysrc = b_src
                 if remote_src:
-                    _, b_mysrc = tempfile.mkstemp(dir=os.path.dirname(b_dest))
+                    _, mysrc = tempfile.mkstemp(dir=os.path.dirname(dest))
+                    b_mysrc = to_bytes(mysrc, errors='surrogate_or_strict')
                     shutil.copy2(b_src, b_mysrc)
                 module.atomic_move(b_mysrc, dest, unsafe_writes=module.params['unsafe_writes'])
             except IOError:
